@@ -1,0 +1,15 @@
+build/
+sdkconfig.old
+.cproject
+.project
+.settings/
+.idea/
+sdkconfig
+.gdb_history
+.gitignore.swp
+esp.sublime-project
+esp.sublime-workspace
+esp1.log
+cmake-build-debug/
+CMakeLists.txt
+sdkconfig

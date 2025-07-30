@@ -1,0 +1,41 @@
+﻿<Page x:Class="Panopticon.AddingStationPages.AddToRoom"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Panopticon.AddingStationPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      MinHeight="300"
+      MinWidth="300"
+      Title="AddToRoom">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Label Content="X: 0 m" x:Name="xLabel" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label Content="Y: 0 m" x:Name="yLabel" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+        <Label x:Name="LastX" Content="X" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Label x:Name="LastY" Content="Y" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Label Content="Nome stanza" x:Name="Label_RoomName" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="14"/>
+        <Button Content="Cancel"  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Width="90" Height="24" Margin="10,0,20,0" Click="Button_Cancel"/>
+        <Button Content="Confirm" x:Name="Button_ConfirmPosition" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Width="90" Height="24" Margin="0" IsEnabled="False" Click="Button_ConfirmNewStation"/>
+        <Viewbox Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="4" Stretch="Uniform">
+            <Grid x:Name="GridRoom" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" MouseMove="Grid_MouseMove" Background="LightGray" Height="100" Width="50" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MouseDown="Grid_NewPosition" Margin="10">
+                <Canvas x:Name="Canvas_Room" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="50">
+                    <Ellipse x:Name="Ellipse_StationPosition" Fill="Red" Height="7" Width="7" Canvas.Left="50" Stroke="Red" Canvas.Top="50" Visibility="Hidden"/>
+                </Canvas>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</Page>

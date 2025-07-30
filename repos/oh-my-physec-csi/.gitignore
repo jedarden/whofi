@@ -1,0 +1,7 @@
+build/
+sdkconfig
+sdkconfig.old
+.idea
+venv
+sta.csv
+ap.csv

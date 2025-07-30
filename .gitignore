@@ -1,0 +1,147 @@
+# WhoFi Project .gitignore
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pyc
+env/
+venv/
+.env
+.venv
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+
+# Arduino/ESP32
+*.ino.bin
+*.ino.elf
+*.ino.map
+*.ino.partitions.bin
+.pio/
+.platformio/
+
+# C/C++
+*.o
+*.a
+*.so
+*.dll
+*.exe
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Documentation
+*.pdf
+*.docx
+!papers/*.pdf
+
+# Temporary Files
+*.tmp
+*.temp
+*.log
+*.bak
+*.backup
+
+# Research Data
+raw_data/
+experimental_results/
+*.csv
+*.xlsx
+!example_data/
+
+# Configuration Files (keep templates)
+config.json
+secrets.yaml
+credentials.txt
+*.key
+*.pem
+
+# Large Media Files
+*.mp4
+*.avi
+*.mov
+*.wav
+*.mp3
+*.jpg
+*.jpeg
+*.png
+*.gif
+!docs/images/
+!assets/
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Jupyter Notebooks (keep clean versions)
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# Home Assistant
+home-assistant.log
+home-assistant_v2.db*
+.HA_VERSION
+.uuid
+*.pid
+
+# MQTT/Network
+*.pcap
+network_logs/
+
+# Testing
+coverage/
+.coverage
+.pytest_cache/
+test_results/
+
+# Personal Notes
+NOTES.md
+TODO.md
+personal/

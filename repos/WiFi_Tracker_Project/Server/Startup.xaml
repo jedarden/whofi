@@ -1,0 +1,16 @@
+﻿<Window x:Class="Panopticon.Startup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Panopticon"
+        mc:Ignorable="d"
+        Title="Startup" Height="320" Width="597.917" ContentRendered="Window_ContentRendered" ShowInTaskbar="False" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" Background="#FF403737" Foreground="White">
+    <Grid Margin="0,10,0,0">
+        <Image Source="Resources\Panopticon3.png" HorizontalAlignment="Center" VerticalAlignment="Top" Height="250" Margin="0,-14"/>
+        <Label x:Name="label" Content="P A N O P T I C O N" HorizontalAlignment="Left" Margin="0,-8, 0, 10" VerticalAlignment="Bottom" Height="106" Width="588" FontSize="50" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Courier New" Foreground="White"/>
+        <Label x:Name="label1" Content="Loading..." HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="578" Height="30" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semilight" FontSize="14" Foreground="White"/>
+        <Label x:Name="label2" Content="© Brignone, Cecchetti, Salza 2018-2019" HorizontalAlignment="Center" Margin="15,0,5,-4" VerticalAlignment="Bottom" Width="578"  Height="30" HorizontalContentAlignment="Right" FontFamily="Segoe UI Light" FontSize="12" Foreground="White"/>
+
+    </Grid>
+</Window>

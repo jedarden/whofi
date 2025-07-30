@@ -1,0 +1,103 @@
+{
+  "successful_downloads": [],
+  "failed_downloads": [
+    {
+      "video_id": "9FN4JWp4lNo",
+      "video_info": {
+        "video_id": "9FN4JWp4lNo",
+        "title": "ESP32 WiFi CSI (Channel State Information) for Indoor Positioning",
+        "url": "https://www.youtube.com/watch?v=9FN4JWp4lNo",
+        "description": "Tutorial on using ESP32 CSI for indoor positioning and device fingerprinting",
+        "category": "tutorial",
+        "relevance": "high"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=9FN4JWp4lNo! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:36.809867"
+    },
+    {
+      "video_id": "Kx8Ozr4wrfI",
+      "video_info": {
+        "video_id": "Kx8Ozr4wrfI",
+        "title": "WiFi Fingerprinting: Indoor Localization with Machine Learning",
+        "url": "https://www.youtube.com/watch?v=Kx8Ozr4wrfI",
+        "description": "Conference presentation on WiFi fingerprinting techniques",
+        "category": "conference",
+        "relevance": "high"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=Kx8Ozr4wrfI! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:37.256455"
+    },
+    {
+      "video_id": "bHxnHrmTCjY",
+      "video_info": {
+        "video_id": "bHxnHrmTCjY",
+        "title": "CSI-based Device Fingerprinting using ESP32",
+        "url": "https://www.youtube.com/watch?v=bHxnHrmTCjY",
+        "description": "Technical demonstration of CSI fingerprinting",
+        "category": "demo",
+        "relevance": "high"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=bHxnHrmTCjY! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:37.618614"
+    },
+    {
+      "video_id": "XyN8b7dD3gE",
+      "video_info": {
+        "video_id": "XyN8b7dD3gE",
+        "title": "802.11 Channel State Information for Positioning Systems",
+        "url": "https://www.youtube.com/watch?v=XyN8b7dD3gE",
+        "description": "Academic presentation on 802.11 CSI applications",
+        "category": "academic",
+        "relevance": "medium"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=XyN8b7dD3gE! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:38.009354"
+    },
+    {
+      "video_id": "P1Hi6ajAhJI",
+      "video_info": {
+        "video_id": "P1Hi6ajAhJI",
+        "title": "Building WiFi Indoor Positioning with ESP32 and Machine Learning",
+        "url": "https://www.youtube.com/watch?v=P1Hi6ajAhJI",
+        "description": "Practical implementation guide for WiFi positioning",
+        "category": "tutorial",
+        "relevance": "high"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=P1Hi6ajAhJI! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:38.374350"
+    },
+    {
+      "video_id": "tQ8L5T8c7xE",
+      "video_info": {
+        "video_id": "tQ8L5T8c7xE",
+        "title": "WiFi CSI Feature Extraction for Device Classification",
+        "url": "https://www.youtube.com/watch?v=tQ8L5T8c7xE",
+        "description": "Research presentation on CSI feature extraction methods",
+        "category": "research",
+        "relevance": "medium"
+      },
+      "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=tQ8L5T8c7xE! This is most likely caused by:\n\nThe video is no longer available\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!",
+      "error_time": "2025-07-29T15:02:38.729118"
+    }
+  ],
+  "analysis_results": {},
+  "research_metadata": {
+    "timestamp": "2025-07-29T15:02:36.444337",
+    "search_terms": [
+      "whofi project",
+      "whofi github",
+      "WiFi fingerprinting ESP32",
+      "ESP32 CSI fingerprinting",
+      "Channel State Information positioning",
+      "802.11 CSI device detection",
+      "WiFi based indoor localization",
+      "ESP32 WiFi CSI tutorial",
+      "CSI fingerprinting machine learning",
+      "WiFi positioning system ESP32",
+      "indoor positioning WiFi",
+      "device fingerprinting CSI"
+    ],
+    "total_videos_attempted": 6,
+    "successful_transcripts": 0
+  }
+}

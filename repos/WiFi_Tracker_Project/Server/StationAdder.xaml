@@ -1,0 +1,15 @@
+﻿<Window x:Class="Panopticon.StationAdder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Panopticon"
+        mc:Ignorable="d"
+        Title="Add a new Station" MinHeight="350" MinWidth="350"  Height="450" Width="450" Icon="Resources\newStation64.png" Closed="Window_Closed">
+
+    <Frame x:Name="FrameNewStation" NavigationUIVisibility="Hidden" />
+
+
+
+
+</Window>

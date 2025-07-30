@@ -1,0 +1,48 @@
+MIT License
+
+Copyright (c) 2025 WhoFi Research Project
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Additional Terms for Research Use
+
+This project is intended for educational and research purposes. Commercial use
+is permitted under the MIT license terms, but users are encouraged to:
+
+1. Respect privacy and obtain appropriate consent when deploying positioning systems
+2. Follow applicable local laws and regulations regarding WiFi monitoring
+3. Use the technology responsibly and ethically
+4. Contribute improvements back to the open source community
+
+## Attribution
+
+If you use this research in academic work, please cite:
+
+```
+WhoFi: WiFi-Based Indoor Positioning Research
+https://github.com/jedarden/whofi
+```
+
+And reference the original WhoFi paper:
+
+```
+Avola, D., Pannone, D., Montagnini, D., & Emam, E. (2025). 
+WhoFi: Deep Person Re-Identification via Wi-Fi Channel Signal Encoding. 
+arXiv preprint arXiv:2507.12869.
+```

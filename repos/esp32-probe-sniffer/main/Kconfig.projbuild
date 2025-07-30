@@ -1,0 +1,45 @@
+menu "Application Configuration"
+
+config ESP32_ID
+    int "ESP32 Id"
+    default -1
+    help
+	Identification number needed to distinguish each board from the others (must be different for any board).
+	
+config ESP_WIFI_SSID
+    string "WiFi SSID"
+    default "myssid"
+    help
+	SSID (network name) for the example to connect to.
+
+config ESP_WIFI_PASSWORD
+    string "WiFi Password"
+    default "mypassword"
+    help
+	WiFi password (WPA or WPA2) for the example to use.
+		
+config MAX_STA_CONN
+    int "Max STA conn"
+    default 4
+    help
+	Max number of the STA connects to AP.
+	
+config SNTP_SERVER_IP
+    string "SNTP Server IP"
+    default "0.0.0.0"
+    help
+    IP of SNTP server for time synchronization
+
+config SERVER_ADDRESS
+    string "Main server IP"
+    default "0.0.0.0"
+    help
+        IP of main server
+		
+config SERVER_PORT
+    string "Main server PORT"
+    default "8080"
+    help
+        PORT of main server
+
+endmenu
