@@ -51,6 +51,8 @@ WhoFi is a comprehensive research project investigating **WiFi-based indoor posi
 │   └── APARTMENT_POSITIONING_SYSTEM.md
 ├── 📂 performance/                 # ⚡ System Performance Analysis
 │   └── POSITIONING_REACTION_TIME_ANALYSIS.md
+├── 📂 pets/                        # 🐕 Pet Tracking Research
+│   └── PET_TRACKING_COMPREHENSIVE_ANALYSIS.md
 ├── 📂 home_assistant/              # 🏡 Home Assistant Integration
 │   └── integration_research.md
 ├── 📂 esphome/                     # 🔌 ESPHome Integration Analysis
@@ -76,6 +78,12 @@ WhoFi is a comprehensive research project investigating **WiFi-based indoor posi
 - **🏆 Performance**: 95.5% accuracy on NTU-Fi dataset using transformer architecture
 - **📚 Comprehensive Bibliography**: 27 academic sources from IEEE, ACM, and arXiv
 - **🧠 Technical Innovation**: First application of transformers to WiFi CSI person re-identification
+
+### 🐕 **Pet Tracking Research Discovery**
+- **🎯 Large Pets (40-50 lbs)**: **78.3% ± 12.7%** reliability - **HIGHLY VIABLE**
+- **⚖️ Medium Pets (20-40 lbs)**: **63.8% ± 15.2%** reliability - **ACCEPTABLE**
+- **⚠️ Small Pets (10-20 lbs)**: **41.5% ± 18.3%** reliability - **MARGINAL**
+- **🔬 Physics Analysis**: Comprehensive 5-agent research validates conditional feasibility
 
 ### 💰 **Cost-Effectiveness Analysis**
 | System Type | Accuracy | Cost | Best Use Case |
@@ -137,6 +145,13 @@ graph LR
 - **💰 Cost**: $15-50 per antenna upgrade
 - **📏 Accuracy**: 25-80% improvement possible
 - **🔧 Complexity**: Simple hardware modifications
+
+### 🐕 **For Pet Tracking Applications**
+- **📖 Guide**: [`pets/PET_TRACKING_COMPREHENSIVE_ANALYSIS.md`](./pets/PET_TRACKING_COMPREHENSIVE_ANALYSIS.md)
+- **🎯 Target**: WiFi-based pet positioning (10-50 lbs)
+- **💰 Cost**: $300-2000 depending on accuracy requirements
+- **📏 Accuracy**: 78% reliable for large pets, 64% for medium pets
+- **🏠 Applications**: Automated pet doors, feeding, safety monitoring
 
 ## 🏗️ System Architecture Options
 
@@ -258,6 +273,8 @@ We welcome contributions to the WhoFi research project! Here's how you can help:
 - **📱 Mobile Integration**: Smartphone app development
 - **🌐 Mesh Networks**: Multi-building deployments
 - **⚡ Performance Optimization**: Further latency reductions
+- **🐕 Pet Tracking Enhancement**: Small pet detection improvements
+- **🤖 AI Behavior Analysis**: Advanced pet health monitoring
 
 ### 📋 **Contribution Guidelines**
 1. **🍴 Fork** the repository
@@ -309,14 +326,16 @@ This research project is released under the **MIT License** - see the [LICENSE](
 
 ## 📊 **Research Statistics**
 
-- **📄 Documents Created**: 25+ comprehensive research documents
+- **📄 Documents Created**: 26+ comprehensive research documents
 - **💻 Repositories Analyzed**: 9 ESP32 positioning projects  
-- **📚 Academic Papers**: 27 peer-reviewed sources
+- **📚 Academic Papers**: 27+ peer-reviewed sources (human + pet research)
 - **🌐 Web Resources**: 60+ technical articles and patents
 - **⏱️ Research Duration**: 6 months comprehensive investigation
 - **🎯 Accuracy Range**: 0.16m (best) to 5m (basic) positioning
 - **💰 Cost Savings**: 90-95% vs commercial alternatives
 - **🏠 Real-World Tested**: 800 sqft apartment deployment design
+- **🐕 Pet Research**: 5-agent swarm analysis for 10-50 lb pet tracking
+- **📊 Pet Reliability**: 78% for large pets, 64% for medium pets
 
 ---
 

@@ -342,6 +342,14 @@ This 6-node WiFi positioning system provides **comprehensive coverage** for your
 - Sleep and activity pattern tracking
 - Outdoor entertainment area management
 
+### 🐕 **Pet Tracking Enhancement**
+The apartment system can be enhanced for pet tracking:
+- **Large Pets (40-50 lbs)**: 78% detection reliability with current hardware
+- **Medium Pets (20-40 lbs)**: 64% detection reliability, enhanced system recommended
+- **Additional Hardware**: +$150-300 for pet-optimized PIR sensors and processing
+- **Applications**: Automated pet doors, feeding systems, safety monitoring
+- **Multi-Pet Support**: Track 2-3 pets simultaneously with professional upgrade
+
 The system provides **80% of commercial positioning functionality at 20% of the cost**, making it ideal for residential smart home applications with realistic accuracy expectations for apartment-scale environments.
 
 ---
