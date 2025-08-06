@@ -26,7 +26,7 @@ services:
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
       - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=csipassword123
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD:-changeme}
       - DOCKER_INFLUXDB_INIT_ORG=csi-org
       - DOCKER_INFLUXDB_INIT_BUCKET=csi_data
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=csi-super-secret-auth-token
@@ -78,14 +78,14 @@ services:
       - MQTT_BROKER_HOST=mosquitto
       - MQTT_BROKER_PORT=1883
       - MQTT_USERNAME=csi_user
-      - MQTT_PASSWORD=csi_password
+      - MQTT_PASSWORD=${MQTT_PASSWORD:-changeme}
       - INFLUXDB_URL=http://influxdb:8086
       - INFLUXDB_TOKEN=csi-super-secret-auth-token
       - INFLUXDB_ORG=csi-org
       - INFLUXDB_BUCKET=csi_data
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_PASSWORD=csiredispass
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-changeme}
       - NTP_SERVER=chrony
     volumes:
       - ./backend:/app

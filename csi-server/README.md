@@ -24,7 +24,19 @@ The CSI server stack consists of the following components:
 
 ### Installation
 
-1. **Start the server stack:**
+1. **Security Setup (REQUIRED):**
+   ```bash
+   # Copy environment template
+   cp .env.example .env
+   
+   # Generate secure passwords
+   openssl rand -base64 32  # Use for each password in .env
+   
+   # Edit .env with your secure values
+   nano .env
+   ```
+
+2. **Start the server stack:**
    ```bash
    ./start.sh
    ```
@@ -35,7 +47,7 @@ The CSI server stack consists of the following components:
 
 3. **Configure your ESP32 nodes:**
    - Set MQTT broker to your server IP: `your-server-ip:1883`
-   - Use credentials: `csi_user` / `csi_password`
+   - Use credentials from your `.env` file
 
 ### Default Access Points
 
@@ -43,8 +55,8 @@ The CSI server stack consists of the following components:
 |---------|-----|-------------|
 | Web Dashboard | https://localhost | - |
 | API Endpoint | https://localhost/api | - |
-| InfluxDB | http://localhost:8086 | admin / csipassword123 |
-| MQTT Broker | localhost:1883 | csi_user / csi_password |
+| InfluxDB | http://localhost:8086 | Set in .env file |
+| MQTT Broker | localhost:1883 | Set in .env file |
 
 ## 📊 Features
 
