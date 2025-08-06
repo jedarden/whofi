@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "unity.h"
+#include <unity.h>
 #include "ota_updater.h"
 #include "esp_log.h"
 

@@ -13,6 +13,8 @@
 #include "ota_updater.h"
 #include "mqtt_client_wrapper.h"
 #include <string.h>
+#include <stdlib.h>
+#include <sys/time.h>
 #include <esp_log.h>
 #include <esp_err.h>
 #include <esp_ota_ops.h>

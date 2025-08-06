@@ -382,10 +382,12 @@ esp_err_t csi_collector_update_config(const csi_collector_config_t *config)
 esp_err_t csi_collector_get_config(csi_collector_config_t *config)
 {
     if (!config) {
+        ESP_LOGE(TAG, "Config pointer is NULL");
         return ESP_ERR_INVALID_ARG;
     }
 
     if (!s_ctx.initialized) {
+        ESP_LOGE(TAG, "Not initialized");
         return ESP_ERR_INVALID_STATE;
     }
 

@@ -15,7 +15,11 @@ static const char *TAG = "CSI_BUFFER";
  */
 typedef struct csi_buffer_ctx {
     QueueHandle_t queue;
+    SemaphoreHandle_t mutex;
     uint16_t size;
+    uint32_t total_items;
+    uint32_t dropped_items;
+    bool overwrite_enabled;
     bool initialized;
 } csi_buffer_ctx_t;
 
@@ -36,7 +40,17 @@ esp_err_t csi_buffer_init(csi_buffer_handle_t *handle, uint16_t size)
         return ESP_ERR_NO_MEM;
     }
 
+    ctx->mutex = xSemaphoreCreateMutex();
+    if (!ctx->mutex) {
+        vQueueDelete(ctx->queue);
+        free(ctx);
+        return ESP_ERR_NO_MEM;
+    }
+
     ctx->size = size;
+    ctx->total_items = 0;
+    ctx->dropped_items = 0;
+    ctx->overwrite_enabled = false;
     ctx->initialized = true;
 
     *handle = ctx;
@@ -54,10 +68,26 @@ esp_err_t csi_buffer_put_data(csi_buffer_handle_t handle, const csi_data_t *data
         return ESP_ERR_INVALID_STATE;
     }
 
+    xSemaphoreTake(ctx->mutex, portMAX_DELAY);
+    
     if (xQueueSend(ctx->queue, data, 0) != pdTRUE) {
+        if (ctx->overwrite_enabled && uxQueueSpacesAvailable(ctx->queue) == 0) {
+            // Remove oldest item and try again
+            csi_data_t dummy;
+            xQueueReceive(ctx->queue, &dummy, 0);
+            if (xQueueSend(ctx->queue, data, 0) == pdTRUE) {
+                ctx->total_items++;
+                xSemaphoreGive(ctx->mutex);
+                return ESP_OK;
+            }
+        }
+        ctx->dropped_items++;
+        xSemaphoreGive(ctx->mutex);
         return ESP_ERR_NO_MEM;
     }
 
+    ctx->total_items++;
+    xSemaphoreGive(ctx->mutex);
     return ESP_OK;
 }
 
@@ -86,9 +116,16 @@ esp_err_t csi_buffer_deinit(csi_buffer_handle_t handle)
     }
 
     csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
-    if (ctx->queue) {
-        vQueueDelete(ctx->queue);
+    
+    if (ctx->initialized) {
+        if (ctx->queue) {
+            vQueueDelete(ctx->queue);
+        }
+        if (ctx->mutex) {
+            vSemaphoreDelete(ctx->mutex);
+        }
     }
+    
     free(ctx);
     return ESP_OK;
 }

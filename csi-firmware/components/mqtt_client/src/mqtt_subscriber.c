@@ -18,10 +18,8 @@
 
 static const char *TAG = "MQTT_SUB";
 
-// Function pointer types for command handlers
-typedef esp_err_t (*config_update_handler_t)(const cJSON *config);
-typedef esp_err_t (*command_handler_t)(const cJSON *params);
-typedef esp_err_t (*ota_handler_t)(const char *url, const char *version);
+// Function pointer types for command handlers (using types from header)
+// Note: These are already defined in the header file
 
 // Handler function pointers
 static config_update_handler_t s_config_handler = NULL;

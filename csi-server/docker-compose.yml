@@ -29,7 +29,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD:-changeme}
       - DOCKER_INFLUXDB_INIT_ORG=csi-org
       - DOCKER_INFLUXDB_INIT_BUCKET=csi_data
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=csi-super-secret-auth-token
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN:-changeme}
     volumes:
       - influxdb_data:/var/lib/influxdb2
       - influxdb_config:/etc/influxdb2
@@ -45,7 +45,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes --requirepass csiredispass
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-changeme}
     restart: unless-stopped
     networks:
       - csi_network
@@ -80,7 +80,7 @@ services:
       - MQTT_USERNAME=csi_user
       - MQTT_PASSWORD=${MQTT_PASSWORD:-changeme}
       - INFLUXDB_URL=http://influxdb:8086
-      - INFLUXDB_TOKEN=csi-super-secret-auth-token
+      - INFLUXDB_TOKEN=${INFLUXDB_TOKEN:-changeme}
       - INFLUXDB_ORG=csi-org
       - INFLUXDB_BUCKET=csi_data
       - REDIS_HOST=redis

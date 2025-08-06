@@ -128,9 +128,8 @@ if [ $healthy_count -eq ${#services[@]} ]; then
     echo -e "  MQTT Broker:   ${BLUE}localhost:1883${NC}"
     echo -e "  InfluxDB:      ${BLUE}http://localhost:8086${NC}"
     echo
-    echo -e "${YELLOW}Default Credentials:${NC}"
-    echo -e "  InfluxDB: admin / csipassword123"
-    echo -e "  MQTT: csi_user / csi_password"
+    echo -e "${YELLOW}Credentials:${NC}"
+    echo -e "  Check your .env file for credentials"
     echo
     print_warning "Please change default passwords before production use!"
 else
