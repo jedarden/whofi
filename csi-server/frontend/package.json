@@ -24,6 +24,7 @@
     "@mui/x-charts": "^6.0.0-alpha.0",
     "chart.js": "^4.4.0",
     "react-chartjs-2": "^5.2.0",
+    "chartjs-adapter-moment": "^1.0.1",
     "leaflet": "^1.9.4",
     "react-leaflet": "^4.2.1",
     "axios": "^1.5.0",
@@ -31,7 +32,10 @@
     "lodash": "^4.17.21",
     "react-query": "^3.39.3",
     "socket.io-client": "^4.7.2",
-    "react-grid-layout": "^1.4.4"
+    "react-grid-layout": "^1.4.4",
+    "@react-three/fiber": "^8.15.11",
+    "@react-three/drei": "^9.88.13",
+    "three": "^0.158.0"
   },
   "devDependencies": {
     "react-scripts": "5.0.1",

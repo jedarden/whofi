@@ -24,6 +24,9 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   LocationOn as LocationIcon,
+  Heatmap as HeatmapIcon,
+  Timeline as SignalIcon,
+  Tune as CalibrateIcon,
   Sensors as SensorsIcon,
   Settings as SettingsIcon,
   Analytics as AnalyticsIcon,
@@ -33,6 +36,9 @@ import {
 // Import components
 import Dashboard from './components/Dashboard';
 import PositionView from './components/PositionView';
+import HeatmapView from './components/HeatmapView';
+import SignalAnalyzer from './components/SignalAnalyzer';
+import CalibrationInterface from './components/CalibrationInterface';
 import NodesView from './components/NodesView';
 import Analytics from './components/Analytics';
 import Settings from './components/Settings';
@@ -69,6 +75,9 @@ function App() {
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
     { text: 'Position Tracking', icon: <LocationIcon />, path: '/position' },
+    { text: 'Heatmap View', icon: <HeatmapIcon />, path: '/heatmap' },
+    { text: 'Signal Analyzer', icon: <SignalIcon />, path: '/signals' },
+    { text: 'Calibration', icon: <CalibrateIcon />, path: '/calibration' },
     { text: 'Node Status', icon: <SensorsIcon />, path: '/nodes' },
     { text: 'Analytics', icon: <AnalyticsIcon />, path: '/analytics' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/settings' }
@@ -209,6 +218,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/position" element={<PositionView />} />
+            <Route path="/heatmap" element={<HeatmapView />} />
+            <Route path="/signals" element={<SignalAnalyzer />} />
+            <Route path="/calibration" element={<CalibrationInterface />} />
             <Route path="/nodes" element={<NodesView />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
