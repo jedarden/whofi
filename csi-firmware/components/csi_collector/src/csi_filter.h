@@ -46,6 +46,25 @@ esp_err_t csi_filter_init(csi_filter_handle_t *handle, const csi_filter_config_t
 esp_err_t csi_filter_process(csi_filter_handle_t handle, csi_data_t *data);
 
 /**
+ * @brief Get filter statistics
+ * @param handle Filter handle
+ * @param total_processed Pointer to store total processed count
+ * @param total_passed Pointer to store total passed count
+ * @param total_filtered Pointer to store total filtered count
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t csi_filter_get_stats(csi_filter_handle_t handle, uint32_t *total_processed, 
+                              uint32_t *total_passed, uint32_t *total_filtered);
+
+/**
+ * @brief Update filter configuration
+ * @param handle Filter handle
+ * @param config New configuration
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t csi_filter_update_config(csi_filter_handle_t handle, const csi_filter_config_t *config);
+
+/**
  * @brief Deinitialize CSI filter
  * @param handle Filter handle
  * @return ESP_OK on success, error code on failure

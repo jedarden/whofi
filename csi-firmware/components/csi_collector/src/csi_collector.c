@@ -329,6 +329,73 @@ esp_err_t csi_collector_reset_stats(void)
     return ESP_OK;
 }
 
+esp_err_t csi_collector_update_config(const csi_collector_config_t *config)
+{
+    if (!config) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    if (!s_ctx.initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    // Validate new configuration
+    if (config->sample_rate == 0 || config->sample_rate > 100) {
+        ESP_LOGE(TAG, "Invalid sample rate: %d", config->sample_rate);
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    if (config->buffer_size < 256 || config->buffer_size > 4096) {
+        ESP_LOGE(TAG, "Invalid buffer size: %d", config->buffer_size);
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    xSemaphoreTake(s_ctx.mutex, portMAX_DELAY);
+
+    // Update configuration
+    memcpy(&s_ctx.config, config, sizeof(csi_collector_config_t));
+
+    // Update filter if configuration changed
+    if (s_ctx.filter_handle && config->filter_enabled) {
+        csi_filter_config_t filter_config = {
+            .threshold = config->filter_threshold,
+            .enable_amplitude_filter = config->enable_amplitude,
+            .enable_phase_filter = config->enable_phase
+        };
+        
+        // Reinitialize filter with new config
+        csi_filter_deinit(s_ctx.filter_handle);
+        esp_err_t err = csi_filter_init(&s_ctx.filter_handle, &filter_config);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG, "Failed to update filter configuration");
+            xSemaphoreGive(s_ctx.mutex);
+            return err;
+        }
+    }
+
+    xSemaphoreGive(s_ctx.mutex);
+
+    ESP_LOGI(TAG, "Configuration updated successfully");
+    return ESP_OK;
+}
+
+esp_err_t csi_collector_get_config(csi_collector_config_t *config)
+{
+    if (!config) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    if (!s_ctx.initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    xSemaphoreTake(s_ctx.mutex, portMAX_DELAY);
+    memcpy(config, &s_ctx.config, sizeof(csi_collector_config_t));
+    xSemaphoreGive(s_ctx.mutex);
+
+    return ESP_OK;
+}
+
 static void csi_process_task(void *pvParameters)
 {
     csi_data_t csi_data;

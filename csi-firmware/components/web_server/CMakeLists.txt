@@ -1,20 +1,3 @@
-# Web Server Component CMakeLists.txt
-idf_component_register(
-    SRCS 
-        "src/web_server.c"
-        "src/web_handlers.c"
-        "src/web_auth.c"
-    INCLUDE_DIRS 
-        "include"
-    PRIV_INCLUDE_DIRS
-        "src"
-    REQUIRES 
-        "esp_http_server"
-        "esp_wifi"
-        "esp_event"
-        "json"
-        "spiffs"
-        "nvs_flash"
-    PRIV_REQUIRES
-        "unity"
-)
+idf_component_register(SRCS "src/web_server.c"
+                       INCLUDE_DIRS "include" "src"
+                       REQUIRES esp_http_server esp_wifi json nvs_flash)

@@ -12,6 +12,7 @@ idf_component_register(
         "esp_event"
         "lwip"
         "nvs_flash"
+        "esp_netif"
     PRIV_REQUIRES
         "unity"
 )

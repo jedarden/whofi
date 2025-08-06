@@ -47,6 +47,25 @@ esp_err_t csi_buffer_put_data(csi_buffer_handle_t handle, const csi_data_t *data
 esp_err_t csi_buffer_get_data(csi_buffer_handle_t handle, csi_data_t *data, TickType_t timeout_ticks);
 
 /**
+ * @brief Get buffer statistics
+ * @param handle Buffer handle
+ * @param total_items Pointer to store total items count
+ * @param dropped_items Pointer to store dropped items count
+ * @param queue_size Pointer to store current queue size
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t csi_buffer_get_stats(csi_buffer_handle_t handle, uint32_t *total_items, 
+                              uint32_t *dropped_items, uint32_t *queue_size);
+
+/**
+ * @brief Set buffer overwrite mode
+ * @param handle Buffer handle
+ * @param enable Enable overwrite mode
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t csi_buffer_set_overwrite(csi_buffer_handle_t handle, bool enable);
+
+/**
  * @brief Deinitialize CSI buffer
  * @param handle Buffer handle
  * @return ESP_OK on success, error code on failure

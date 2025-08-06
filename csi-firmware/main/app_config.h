@@ -36,6 +36,9 @@ typedef struct {
     uint16_t buffer_size;   ///< Buffer size for CSI data
     bool filter_enabled;    ///< Enable CSI data filtering
     float filter_threshold; ///< Filter threshold value
+    bool enable_rssi;       ///< Include RSSI data
+    bool enable_phase;      ///< Include phase information
+    bool enable_amplitude;  ///< Include amplitude information
 } csi_config_t;
 
 /**

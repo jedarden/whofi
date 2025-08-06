@@ -14,6 +14,7 @@ idf_component_register(
         "esp_wifi"
         "esp_event"
         "nvs_flash"
+        "csi_collector"
     PRIV_REQUIRES
         "unity"
 )

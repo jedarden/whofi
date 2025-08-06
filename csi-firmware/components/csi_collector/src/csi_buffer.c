@@ -92,3 +92,50 @@ esp_err_t csi_buffer_deinit(csi_buffer_handle_t handle)
     free(ctx);
     return ESP_OK;
 }
+
+esp_err_t csi_buffer_get_stats(csi_buffer_handle_t handle, uint32_t *total_items, 
+                              uint32_t *dropped_items, uint32_t *queue_size)
+{
+    if (!handle) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
+    if (!ctx->initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    xSemaphoreTake(ctx->mutex, portMAX_DELAY);
+    
+    if (total_items) {
+        *total_items = ctx->total_items;
+    }
+    if (dropped_items) {
+        *dropped_items = ctx->dropped_items;
+    }
+    if (queue_size) {
+        *queue_size = (uint32_t)uxQueueMessagesWaiting(ctx->queue);
+    }
+    
+    xSemaphoreGive(ctx->mutex);
+    return ESP_OK;
+}
+
+esp_err_t csi_buffer_set_overwrite(csi_buffer_handle_t handle, bool enable)
+{
+    if (!handle) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
+    if (!ctx->initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    xSemaphoreTake(ctx->mutex, portMAX_DELAY);
+    ctx->overwrite_enabled = enable;
+    xSemaphoreGive(ctx->mutex);
+    
+    ESP_LOGI(TAG, "Buffer overwrite mode %s", enable ? "enabled" : "disabled");
+    return ESP_OK;
+}

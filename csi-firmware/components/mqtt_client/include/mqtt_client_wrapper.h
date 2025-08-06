@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <esp_err.h>
+#include <cJSON.h>
 #include "csi_collector.h"
 
 #ifdef __cplusplus
@@ -140,6 +141,112 @@ esp_err_t mqtt_client_get_stats(mqtt_stats_t *stats);
  * @return ESP_OK on success, error code on failure
  */
 esp_err_t mqtt_client_reset_stats(void);
+
+// ===== MQTT PUBLISHER UTILITIES =====
+
+/**
+ * @brief Publish device status information
+ * @param device_id Device identifier
+ * @param version Firmware version
+ * @param uptime Uptime in seconds
+ * @param wifi_rssi Wi-Fi RSSI value
+ * @param free_heap Free heap memory in bytes
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_publish_device_status(const char *device_id, const char *version, 
+                                    uint32_t uptime, int8_t wifi_rssi, uint32_t free_heap);
+
+/**
+ * @brief Publish system metrics
+ * @param device_id Device identifier
+ * @param cpu_usage CPU usage percentage
+ * @param free_heap Free heap memory in bytes
+ * @param min_free_heap Minimum free heap memory
+ * @param task_count Number of running tasks
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_publish_system_metrics(const char *device_id, float cpu_usage, 
+                                     uint32_t free_heap, uint32_t min_free_heap,
+                                     uint32_t task_count);
+
+/**
+ * @brief Publish error/alert message
+ * @param device_id Device identifier
+ * @param level Alert level ("ERROR", "WARNING", "INFO")
+ * @param component Component name that generated the alert
+ * @param message Alert message
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_publish_alert(const char *device_id, const char *level, 
+                           const char *component, const char *message);
+
+/**
+ * @brief Publish configuration acknowledgment
+ * @param device_id Device identifier
+ * @param config_id Configuration change ID
+ * @param success Whether configuration was applied successfully
+ * @param error_msg Error message if unsuccessful
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_publish_config_ack(const char *device_id, const char *config_id, 
+                                 bool success, const char *error_msg);
+
+// ===== MQTT SUBSCRIBER UTILITIES =====
+
+/**
+ * @brief Configuration update handler function type
+ */
+typedef esp_err_t (*config_update_handler_t)(const cJSON *config);
+
+/**
+ * @brief Command handler function type
+ */
+typedef esp_err_t (*command_handler_t)(const cJSON *params);
+
+/**
+ * @brief OTA handler function type
+ */
+typedef esp_err_t (*ota_handler_t)(const char *url, const char *version);
+
+/**
+ * @brief Default message callback for MQTT subscriber
+ */
+void mqtt_subscriber_default_callback(const char *topic, const char *data, int data_len, void *user_ctx);
+
+/**
+ * @brief Register configuration update handler
+ * @param handler Configuration update handler function
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_subscriber_register_config_handler(config_update_handler_t handler);
+
+/**
+ * @brief Register command handler
+ * @param handler Command handler function
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_subscriber_register_command_handler(command_handler_t handler);
+
+/**
+ * @brief Register OTA update handler
+ * @param handler OTA update handler function
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_subscriber_register_ota_handler(ota_handler_t handler);
+
+/**
+ * @brief Subscribe to standard device control topics
+ * @param device_id Device identifier
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_subscriber_subscribe_device_topics(const char *device_id);
+
+/**
+ * @brief Unsubscribe from device control topics
+ * @param device_id Device identifier
+ * @return ESP_OK on success, error code on failure
+ */
+esp_err_t mqtt_subscriber_unsubscribe_device_topics(const char *device_id);
 
 #ifdef __cplusplus
 }
