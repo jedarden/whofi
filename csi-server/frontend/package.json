@@ -1,0 +1,64 @@
+{
+  "name": "csi-frontend",
+  "version": "1.0.0",
+  "description": "CSI Positioning System Frontend",
+  "main": "src/index.js",
+  "homepage": "/",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "serve": "serve -s build -l 3000",
+    "docker:build": "docker build -t csi-frontend .",
+    "docker:run": "docker run -p 80:80 csi-frontend"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.10",
+    "@mui/icons-material": "^5.14.9",
+    "@mui/x-charts": "^6.0.0-alpha.0",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^4.2.1",
+    "axios": "^1.5.0",
+    "moment": "^2.29.4",
+    "lodash": "^4.17.21",
+    "react-query": "^3.39.3",
+    "socket.io-client": "^4.7.2",
+    "react-grid-layout": "^1.4.4"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1",
+    "serve": "^14.2.1",
+    "@types/leaflet": "^1.9.4",
+    "web-vitals": "^3.4.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "keywords": [
+    "csi",
+    "wifi",
+    "positioning",
+    "react",
+    "frontend",
+    "dashboard"
+  ],
+  "author": "CSI Positioning System",
+  "license": "MIT"
+}

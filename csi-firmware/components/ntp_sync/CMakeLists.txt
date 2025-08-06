@@ -1,0 +1,17 @@
+# NTP Sync Component CMakeLists.txt
+idf_component_register(
+    SRCS 
+        "src/ntp_sync.c"
+        "src/ntp_client.c"
+    INCLUDE_DIRS 
+        "include"
+    PRIV_INCLUDE_DIRS
+        "src"
+    REQUIRES 
+        "esp_wifi"
+        "esp_event"
+        "lwip"
+        "nvs_flash"
+    PRIV_REQUIRES
+        "unity"
+)

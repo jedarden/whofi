@@ -1,0 +1,71 @@
+# ESPHome configuration for D1 Mini ESP32 with CSI
+esphome:
+  name: whofi-csi-node
+  platform: ESP32
+  board: d1_mini_32
+  includes:
+    - esphome_csi_component.h
+  platformio_options:
+    # Enable ESP-IDF framework alongside Arduino
+    framework: 
+      - arduino
+      - espidf
+    build_flags:
+      - -DUSE_ESP32
+      - -DESP32
+      - -DARDUINO_ARCH_ESP32
+
+wifi:
+  ssid: "YourWiFiSSID"
+  password: "YourWiFiPassword"
+  # Enable promiscuous mode for CSI
+  manual_ip:
+    static_ip: 192.168.1.100
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+# MQTT for sending CSI data to Docker processor
+mqtt:
+  broker: 192.168.1.2  # Your Docker host
+  port: 1883
+  username: "whofi"
+  password: "whofi_password"
+  discovery: true
+  discovery_prefix: homeassistant
+
+# Logger configuration
+logger:
+  level: INFO
+  baud_rate: 921600  # High baud rate for CSI data
+
+# Custom CSI sensor
+custom_component:
+  - lambda: |-
+      auto csi = new esphome::csi_sensor::CSISensor();
+      return {csi};
+
+# Basic sensors for monitoring
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 10s
+    
+  - platform: uptime
+    name: "Uptime"
+
+# Status LED
+status_led:
+  pin: GPIO2
+
+# Binary sensor for connection status
+binary_sensor:
+  - platform: status
+    name: "Node Status"
+
+# OTA updates
+ota:
+  password: "your_ota_password"
+
+# Web server for debugging
+web_server:
+  port: 80

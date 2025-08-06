@@ -1,0 +1,39 @@
+# WhoFi CSI Processor Configuration
+
+mqtt:
+  broker: "192.168.1.2"
+  port: 1883
+  username: "whofi"
+  password: "whofi_password"
+
+# Node positions in meters (x, y)
+# Configure based on your actual node placement
+node_positions:
+  "24:6f:28:XX:XX:XX": [0, 0]      # Node 1 - Corner
+  "24:6f:28:YY:YY:YY": [5, 0]      # Node 2 - 5m along x-axis
+  "24:6f:28:ZZ:ZZ:ZZ": [5, 5]      # Node 3 - Opposite corner
+  "24:6f:28:AA:AA:AA": [0, 5]      # Node 4 - 4th corner
+
+# Processing parameters
+processing:
+  min_nodes: 3                       # Minimum nodes for position calculation
+  buffer_size: 100                   # CSI data points to keep
+  update_interval: 0.5               # Position update interval (seconds)
+  
+# Advanced CSI processing (future implementation)
+csi:
+  use_phase: false                   # Use CSI phase data
+  use_amplitude: true                # Use CSI amplitude data
+  subcarriers: 64                    # Number of subcarriers to process
+  filtering: "kalman"                # Filtering method
+
+# Machine learning model (future)
+ml:
+  enabled: false
+  model_path: "/app/models/whofi_transformer.pt"
+  
+# Home Assistant integration
+homeassistant:
+  discovery: true
+  device_name: "WhoFi Tracker"
+  unique_id: "whofi_csi_tracker_001"

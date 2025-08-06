@@ -1,0 +1,20 @@
+# OTA Updater Component CMakeLists.txt
+idf_component_register(
+    SRCS 
+        "src/ota_updater.c"
+        "src/ota_client.c"
+        "src/ota_verify.c"
+    INCLUDE_DIRS 
+        "include"
+    PRIV_INCLUDE_DIRS
+        "src"
+    REQUIRES 
+        "esp_https_ota"
+        "esp_http_client"
+        "esp_wifi"
+        "esp_event"
+        "json"
+        "nvs_flash"
+    PRIV_REQUIRES
+        "unity"
+)

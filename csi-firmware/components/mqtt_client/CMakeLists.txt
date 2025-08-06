@@ -1,0 +1,19 @@
+# MQTT Client Component CMakeLists.txt
+idf_component_register(
+    SRCS 
+        "src/mqtt_client_wrapper.c"
+        "src/mqtt_publisher.c"
+        "src/mqtt_subscriber.c"
+    INCLUDE_DIRS 
+        "include"
+    PRIV_INCLUDE_DIRS
+        "src"
+    REQUIRES 
+        "mqtt"
+        "json"
+        "esp_wifi"
+        "esp_event"
+        "nvs_flash"
+    PRIV_REQUIRES
+        "unity"
+)

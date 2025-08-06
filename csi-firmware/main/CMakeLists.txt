@@ -1,0 +1,22 @@
+# Main component CMakeLists.txt
+idf_component_register(
+    SRCS 
+        "main.c"
+        "app_config.c"
+        "system_init.c"
+    INCLUDE_DIRS 
+        "."
+    REQUIRES 
+        "csi_collector"
+        "web_server"
+        "mqtt_client"
+        "ntp_sync"
+        "ota_updater"
+        "nvs_flash"
+        "esp_wifi"
+        "esp_http_server"
+        "esp_https_ota"
+        "json"
+        "spiffs"
+        "fatfs"
+)

@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  # MQTT Broker (Mosquitto)
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: csi-mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./config/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./config/mosquitto/passwd:/mosquitto/config/passwd
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+  # InfluxDB Time-series Database
+  influxdb:
+    image: influxdb:2.7
+    container_name: csi-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=csipassword123
+      - DOCKER_INFLUXDB_INIT_ORG=csi-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=csi_data
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=csi-super-secret-auth-token
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: csi-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass csiredispass
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+  # NTP Server (Chrony)
+  chrony:
+    image: publicarray/chrony:latest
+    container_name: csi-ntp
+    ports:
+      - "123:123/udp"
+    environment:
+      - NTP_SERVERS=pool.ntp.org
+    volumes:
+      - ./config/chrony/chrony.conf:/etc/chrony/chrony.conf:ro
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+  # Backend API Server (Node.js)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: csi-backend
+    ports:
+      - "3000:3000"
+      - "8080:8080"  # WebSocket port
+    environment:
+      - NODE_ENV=production
+      - MQTT_BROKER_HOST=mosquitto
+      - MQTT_BROKER_PORT=1883
+      - MQTT_USERNAME=csi_user
+      - MQTT_PASSWORD=csi_password
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=csi-super-secret-auth-token
+      - INFLUXDB_ORG=csi-org
+      - INFLUXDB_BUCKET=csi_data
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=csiredispass
+      - NTP_SERVER=chrony
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./config:/app/config
+    depends_on:
+      - mosquitto
+      - influxdb
+      - redis
+      - chrony
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+  # Frontend Web Server (Nginx + React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: csi-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - csi_network
+
+volumes:
+  mosquitto_data:
+  mosquitto_logs:
+  influxdb_data:
+  influxdb_config:
+  redis_data:
+
+networks:
+  csi_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

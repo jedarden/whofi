@@ -1,0 +1,94 @@
+/**
+ * @file csi_buffer.c
+ * @brief CSI data buffering implementation
+ */
+
+#include "csi_buffer.h"
+#include <stdlib.h>
+#include <string.h>
+#include <esp_log.h>
+
+static const char *TAG = "CSI_BUFFER";
+
+/**
+ * @brief CSI buffer context structure
+ */
+typedef struct csi_buffer_ctx {
+    QueueHandle_t queue;
+    uint16_t size;
+    bool initialized;
+} csi_buffer_ctx_t;
+
+esp_err_t csi_buffer_init(csi_buffer_handle_t *handle, uint16_t size)
+{
+    if (!handle || size == 0) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = malloc(sizeof(csi_buffer_ctx_t));
+    if (!ctx) {
+        return ESP_ERR_NO_MEM;
+    }
+
+    ctx->queue = xQueueCreate(size / 64, sizeof(csi_data_t)); // Approximate queue size
+    if (!ctx->queue) {
+        free(ctx);
+        return ESP_ERR_NO_MEM;
+    }
+
+    ctx->size = size;
+    ctx->initialized = true;
+
+    *handle = ctx;
+    return ESP_OK;
+}
+
+esp_err_t csi_buffer_put_data(csi_buffer_handle_t handle, const csi_data_t *data)
+{
+    if (!handle || !data) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
+    if (!ctx->initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    if (xQueueSend(ctx->queue, data, 0) != pdTRUE) {
+        return ESP_ERR_NO_MEM;
+    }
+
+    return ESP_OK;
+}
+
+esp_err_t csi_buffer_get_data(csi_buffer_handle_t handle, csi_data_t *data, TickType_t timeout_ticks)
+{
+    if (!handle || !data) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
+    if (!ctx->initialized) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    if (xQueueReceive(ctx->queue, data, timeout_ticks) == pdTRUE) {
+        return ESP_OK;
+    }
+
+    return ESP_ERR_TIMEOUT;
+}
+
+esp_err_t csi_buffer_deinit(csi_buffer_handle_t handle)
+{
+    if (!handle) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    csi_buffer_ctx_t *ctx = (csi_buffer_ctx_t *)handle;
+    if (ctx->queue) {
+        vQueueDelete(ctx->queue);
+    }
+    free(ctx);
+    return ESP_OK;
+}

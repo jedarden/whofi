@@ -1,0 +1,19 @@
+# CSI Collector Component CMakeLists.txt
+idf_component_register(
+    SRCS 
+        "src/csi_collector.c"
+        "src/csi_filter.c"
+        "src/csi_buffer.c"
+    INCLUDE_DIRS 
+        "include"
+    PRIV_INCLUDE_DIRS
+        "src"
+    REQUIRES 
+        "esp_wifi"
+        "esp_event"
+        "freertos"
+        "nvs_flash"
+        "json"
+    PRIV_REQUIRES
+        "unity"
+)

@@ -1,0 +1,94 @@
+# Home Assistant configuration for WhoFi CSI positioning
+
+# MQTT Configuration
+mqtt:
+  broker: 192.168.1.2  # Your Docker host
+  port: 1883
+  username: whofi
+  password: whofi_password
+
+# Device Tracker for position
+device_tracker:
+  - platform: mqtt_json
+    devices:
+      whofi_tracker: homeassistant/device_tracker/whofi_tracker
+
+# Sensors for position data
+sensor:
+  - platform: mqtt
+    name: "WhoFi Position X"
+    state_topic: "homeassistant/sensor/whofi_position/state"
+    value_template: "{{ value_json.x }}"
+    unit_of_measurement: "m"
+    
+  - platform: mqtt
+    name: "WhoFi Position Y"
+    state_topic: "homeassistant/sensor/whofi_position/state"
+    value_template: "{{ value_json.y }}"
+    unit_of_measurement: "m"
+    
+  - platform: mqtt
+    name: "WhoFi Confidence"
+    state_topic: "homeassistant/sensor/whofi_position/state"
+    value_template: "{{ value_json.confidence }}"
+    unit_of_measurement: "%"
+
+# Binary sensors for zone detection
+binary_sensor:
+  - platform: template
+    sensors:
+      living_room_presence:
+        friendly_name: "Living Room Presence"
+        value_template: >-
+          {% set x = states('sensor.whofi_position_x') | float(0) %}
+          {% set y = states('sensor.whofi_position_y') | float(0) %}
+          {{ 0 <= x <= 3 and 0 <= y <= 3 }}
+          
+      kitchen_presence:
+        friendly_name: "Kitchen Presence"
+        value_template: >-
+          {% set x = states('sensor.whofi_position_x') | float(0) %}
+          {% set y = states('sensor.whofi_position_y') | float(0) %}
+          {{ 3 < x <= 6 and 0 <= y <= 3 }}
+
+# Automations
+automation:
+  - alias: "Turn on lights when entering living room"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.living_room_presence
+        to: 'on'
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room
+          
+  - alias: "Update position map"
+    trigger:
+      - platform: state
+        entity_id: sensor.whofi_position_x
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.person_x
+        data:
+          value: "{{ states('sensor.whofi_position_x') }}"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.person_y
+        data:
+          value: "{{ states('sensor.whofi_position_y') }}"
+
+# Input numbers for visualization
+input_number:
+  person_x:
+    name: Person X Position
+    min: -10
+    max: 20
+    step: 0.1
+    
+  person_y:
+    name: Person Y Position  
+    min: -10
+    max: 20
+    step: 0.1
