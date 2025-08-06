@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-runner-whofi-apexalgo-iad
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ghcr.io/actions/actions-runner-controller-charts
+    targetRevision: 0.9.3
+    chart: gha-runner-scale-set
+    helm:
+      parameters:
+        - name: create-namespace
+          value: "true"
+        - name: namespace
+          value: github-actions-runners
+        - name: installCRDs
+          value: "true"
+      valuesObject:      
+        githubConfigUrl: https://github.com/jedarden/whofi
+        githubConfigSecret: whofi-github-secret
+        minRunners: 1
+        maxRunners: 5
+        runnerScaleSetName: whofi-apexalgo-iad-runners
+        containerMode:
+          type: dind
+          kubernetesModeWorkVolumeClaim:
+            accessModes: ["ReadWriteOnce"]
+            storageClassName: "ssd"
+            resources:
+              requests:
+                storage: 20Gi
+        controllerServiceAccount: 
+          namespace: arc-systems
+          name: actions-runner-controller-apexalgo-iad-gha-rs-controller
+        template:
+          spec:
+            containers:
+            - name: runner
+              env:
+              - name: RUNNER_LABELS
+                value: "self-hosted,linux,x64,apexalgo-iad,kubernetes,whofi"
+              - name: RUNNER_GROUP
+                value: "default"
+              resources:
+                requests:
+                  memory: "1Gi"
+                  cpu: "500m"
+                limits:
+                  memory: "4Gi"
+                  cpu: "2"
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: github-actions-runners
+  syncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
+      allowEmpty: true
+    syncOptions:     
+    - Validate=true
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - RespectIgnoreDifferences=true 
+    - ServerSideApply=true

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-runner-whofi
+  namespace: github-actions-runners
+  labels:
+    app: github-runner
+    repository: whofi
+spec:
+  replicas: 2  # Number of runners
+  selector:
+    matchLabels:
+      app: github-runner
+      repository: whofi
+  template:
+    metadata:
+      labels:
+        app: github-runner
+        repository: whofi
+    spec:
+      serviceAccountName: github-runner
+      containers:
+      - name: runner
+        image: summerwind/actions-runner:latest
+        imagePullPolicy: Always
+        env:
+        - name: RUNNER_NAME_PREFIX
+          value: "apexalgo-runner"
+        - name: RUNNER_SCOPE
+          value: "repo"  # or "org" for organization-level runners
+        - name: DISABLE_RUNNER_UPDATE
+          value: "true"
+        - name: EPHEMERAL_RUNNER
+          value: "true"  # Recommended for Kubernetes
+        - name: REPO_URL
+          valueFrom:
+            secretKeyRef:
+              name: github-runner-secret
+              key: REPO_URL
+        - name: RUNNER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-runner-secret
+              key: RUNNER_TOKEN
+        - name: RUNNER_WORKDIR
+          value: "/runner/_work"
+        - name: RUNNER_GROUP
+          value: "default"
+        - name: LABELS
+          value: "self-hosted,Linux,X64,apexalgo-iad,kubernetes,whofi"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        volumeMounts:
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: work
+          mountPath: /runner/_work
+      volumes:
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+      - name: work
+        emptyDir: {}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: github-runner
+  namespace: github-actions-runners
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: github-runner
+  namespace: github-actions-runners
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/exec"]
+  verbs: ["get", "list", "create", "delete"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: github-runner
+  namespace: github-actions-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: github-runner
+subjects:
+- kind: ServiceAccount
+  name: github-runner
+  namespace: github-actions-runners

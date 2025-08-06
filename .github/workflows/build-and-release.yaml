@@ -1,0 +1,222 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Build ESP32 Firmware
+  build-firmware:
+    runs-on: [self-hosted, kubernetes, jedarden-org]
+    container:
+      image: espressif/idf:v5.1.2
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Build ESP32 Firmware
+      working-directory: csi-firmware
+      run: |
+        . $IDF_PATH/export.sh
+        idf.py build
+    
+    - name: Run Firmware Tests
+      working-directory: csi-firmware
+      run: |
+        . $IDF_PATH/export.sh
+        cd test
+        ./run_tests.sh
+    
+    - name: Package Firmware
+      working-directory: csi-firmware
+      run: |
+        mkdir -p release
+        cp build/bootloader/bootloader.bin release/
+        cp build/partition_table/partition-table.bin release/
+        cp build/csi_collector.bin release/
+        cp build/flash_args release/
+        echo "WhōFi ESP32 Firmware" > release/README.txt
+        echo "Flash with: esptool.py write_flash @flash_args" >> release/README.txt
+        tar -czf whofi-firmware-${{ github.sha }}.tar.gz -C release .
+    
+    - name: Upload Firmware Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: esp32-firmware
+        path: csi-firmware/whofi-firmware-*.tar.gz
+        retention-days: 30
+
+  # Build Docker Images
+  build-docker:
+    runs-on: [self-hosted, kubernetes, jedarden-org]
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - context: csi-server
+            dockerfile: backend/Dockerfile
+            image: whofi-backend
+          - context: csi-server
+            dockerfile: frontend/Dockerfile
+            image: whofi-frontend
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+    
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: ${{ matrix.context }}
+        file: ${{ matrix.context }}/${{ matrix.dockerfile }}
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Create Release
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-firmware, build-docker]
+    runs-on: [self-hosted, kubernetes, jedarden-org]
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download firmware artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: esp32-firmware
+        path: ./artifacts
+    
+    - name: Create Release Notes
+      run: |
+        cat > release-notes.md << EOF
+        # WhōFi Release ${{ github.ref_name }}
+        
+        ## 🚀 What's New
+        
+        This release includes the latest ESP32 firmware and Docker images for the WhōFi CSI positioning system.
+        
+        ## 📦 Assets
+        
+        ### ESP32 Firmware
+        - Download the firmware package below
+        - Flash using: \`esptool.py write_flash @flash_args\`
+        
+        ### Docker Images
+        - Backend: \`ghcr.io/jedarden-org/whofi-backend:${{ github.ref_name }}\`
+        - Frontend: \`ghcr.io/jedarden-org/whofi-frontend:${{ github.ref_name }}\`
+        
+        ## 🔧 Quick Start
+        
+        \`\`\`bash
+        # Pull Docker images
+        docker pull ghcr.io/jedarden-org/whofi-backend:${{ github.ref_name }}
+        docker pull ghcr.io/jedarden-org/whofi-frontend:${{ github.ref_name }}
+        
+        # Run with Docker Compose
+        cd csi-server
+        docker-compose up -d
+        \`\`\`
+        
+        ## 📚 Documentation
+        
+        See the [README](https://github.com/jedarden-org/whofi#readme) for detailed setup instructions.
+        EOF
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: release-notes.md
+        files: |
+          ./artifacts/*.tar.gz
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build Documentation
+  build-docs:
+    runs-on: [self-hosted, kubernetes, jedarden-org]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Build Documentation Site
+      run: |
+        npm init -y
+        npm install --save-dev vitepress
+        mkdir -p docs/.vitepress
+        cat > docs/.vitepress/config.js << 'EOF'
+        export default {
+          title: 'WhōFi',
+          description: 'WiFi CSI-based positioning system',
+          base: '/whofi/',
+          themeConfig: {
+            nav: [
+              { text: 'Home', link: '/' },
+              { text: 'Guide', link: '/guide/' },
+              { text: 'API', link: '/api/' }
+            ],
+            sidebar: [
+              {
+                text: 'Getting Started',
+                items: [
+                  { text: 'Introduction', link: '/guide/' },
+                  { text: 'Installation', link: '/guide/installation' },
+                  { text: 'Configuration', link: '/guide/configuration' }
+                ]
+              }
+            ]
+          }
+        }
+        EOF
+        cp README-original.md docs/index.md
+        npx vitepress build docs
+    
+    - name: Upload docs artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: docs/.vitepress/dist
+        retention-days: 30

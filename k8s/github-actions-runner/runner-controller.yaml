@@ -1,0 +1,71 @@
+# Alternative: Using Actions Runner Controller (ARC) - Recommended for production
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: actions-runner-system
+---
+# Install cert-manager first (required by ARC)
+# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+---
+# Install Actions Runner Controller
+# kubectl apply -f https://github.com/actions/actions-runner-controller/releases/download/v0.27.6/actions-runner-controller.yaml
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: whofi-runner-deployment
+  namespace: github-actions-runners
+spec:
+  replicas: 2
+  template:
+    spec:
+      repository: jedarden/whofi
+      labels:
+        - self-hosted
+        - linux
+        - x64
+        - apexalgo-iad
+        - kubernetes
+      # Runner group (optional)
+      group: default
+      # Container spec
+      containers:
+      - name: runner
+        image: summerwind/actions-runner:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+        env:
+        - name: RUNNER_FEATURE_FLAG_EPHEMERAL
+          value: "true"
+      # Volume mounts for Docker-in-Docker if needed
+      dockerdWithinRunnerContainer: true
+      volumeMounts:
+      - name: work
+        mountPath: /runner/_work
+      volumes:
+      - name: work
+        emptyDir: {}
+---
+# HorizontalRunnerAutoscaler for automatic scaling
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: whofi-runner-autoscaler
+  namespace: github-actions-runners
+spec:
+  scaleTargetRef:
+    name: whofi-runner-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: PercentageRunnersBusy
+    scaleUpThreshold: '0.75'
+    scaleDownThreshold: '0.25'
+    scaleUpFactor: '2'
+    scaleDownFactor: '0.5'
