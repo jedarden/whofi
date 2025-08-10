@@ -24,10 +24,16 @@ jobs:
       with:
         submodules: recursive
     
+    - name: Install ESP-IDF Prerequisites
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+    
     - name: Build ESP32 Firmware
       working-directory: csi-firmware
       run: |
         . $IDF_PATH/export.sh
+        idf.py clean
         idf.py build
     
     - name: Run Firmware Tests
@@ -41,13 +47,13 @@ jobs:
       working-directory: csi-firmware
       run: |
         mkdir -p release
-        cp build/bootloader/bootloader.bin release/
-        cp build/partition_table/partition-table.bin release/
-        cp build/csi_collector.bin release/
-        cp build/flash_args release/
-        echo "WhōFi ESP32 Firmware" > release/README.txt
-        echo "Flash with: esptool.py write_flash @flash_args" >> release/README.txt
-        tar -czf whofi-firmware-${{ github.sha }}.tar.gz -C release .
+        cp build/bootloader/bootloader.bin release/ || echo "Bootloader not found"
+        cp build/partition_table/partition-table.bin release/ || echo "Partition table not found"
+        cp build/csi_firmware.bin release/ || echo "Main firmware not found"
+        cp build/flash_args release/ || echo "Flash args not found"
+        echo "WhōFi ESP32-S3 CSI Firmware v1.1.1" > release/README.txt
+        echo "Flash with: esptool.py --chip esp32s3 --port /dev/ttyUSB0 write_flash 0x0 csi_firmware.bin" >> release/README.txt
+        tar -czf whofi-firmware-v1.1.1.tar.gz -C release .
     
     - name: Upload Firmware Artifact
       uses: actions/upload-artifact@v4

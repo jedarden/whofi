@@ -13,28 +13,30 @@ jobs:
     container:
       image: espressif/idf:latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Build ESP32 Firmware
       working-directory: csi-firmware
       run: |
         . $IDF_PATH/export.sh
+        idf.py clean
         idf.py build
     
     - name: Run Firmware Tests
       working-directory: csi-firmware
       run: |
         . $IDF_PATH/export.sh
-        idf.py test
+        cd test
+        ./run_tests.sh
 
   # Docker Server Build and Test
   server-test:
     runs-on: [self-hosted, kubernetes, whofi]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
@@ -62,10 +64,10 @@ jobs:
     runs-on: [self-hosted, kubernetes, whofi]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@v3
     
     - name: Build Backend Image
       working-directory: csi-server
@@ -92,7 +94,7 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment: production
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Deploy to Kubernetes
       run: |
@@ -114,7 +116,7 @@ jobs:
   security-scan:
     runs-on: [self-hosted, kubernetes, whofi]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Run npm audit
       working-directory: csi-server/backend
